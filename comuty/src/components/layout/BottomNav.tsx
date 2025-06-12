@@ -1,4 +1,4 @@
-import React from 'react';
+
 import { Home, TrendingUp, MessageCircle, User, Plus } from 'lucide-react';
 
 export function BottomNav() {

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -77,9 +77,34 @@ export function LoginPage() {
       await saveUserProfile(result.user.uid, userProfile);
       navigate('/survey');
     } catch (error: any) {
-      if (error.code !== 'auth/popup-closed-by-user') {
-        setError('Google 로그인에 실패했습니다.');
+      console.error('Google login error:', error);
+      
+      if (error.code === 'auth/popup-closed-by-user') {
+        // 사용자가 팝업을 닫은 경우는 에러로 처리하지 않음
+        return;
       }
+      
+      // 구체적인 에러 메시지 제공
+      let errorMessage = 'Google 로그인에 실패했습니다.';
+      
+      switch (error.code) {
+        case 'auth/network-request-failed':
+          errorMessage = '네트워크 연결을 확인해주세요.';
+          break;
+        case 'auth/invalid-api-key':
+          errorMessage = 'Firebase 설정에 문제가 있습니다.';
+          break;
+        case 'auth/app-not-authorized':
+          errorMessage = '앱이 Google 로그인을 사용할 권한이 없습니다.';
+          break;
+        case 'auth/operation-not-allowed':
+          errorMessage = 'Google 로그인이 비활성화되어 있습니다.';
+          break;
+        default:
+          errorMessage = `Google 로그인 실패: ${error.message || error.code}`;
+      }
+      
+      setError(errorMessage);
     } finally {
       setIsLoading(false);
     }

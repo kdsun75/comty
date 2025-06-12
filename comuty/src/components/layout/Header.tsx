@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '../ui/button';
 import { Avatar, AvatarImage, AvatarFallback } from '../ui/avatar';
@@ -153,7 +153,13 @@ export function Header({ onMenuToggle }: HeaderProps) {
                       </p>
                     </div>
                     <div className="py-1">
-                      <button className="w-full text-left px-4 py-2 text-sm hover:bg-accent flex items-center gap-2">
+                      <button 
+                        onClick={() => {
+                          setShowProfileMenu(false);
+                          navigate('/profile');
+                        }}
+                        className="w-full text-left px-4 py-2 text-sm hover:bg-accent flex items-center gap-2"
+                      >
                         <User className="h-4 w-4" />
                         내 프로필
                       </button>

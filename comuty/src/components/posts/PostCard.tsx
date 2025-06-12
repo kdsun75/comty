@@ -1,4 +1,4 @@
-import React from 'react';
+
 import { Card, CardContent, CardFooter } from '../ui/card';
 import { Avatar, AvatarImage, AvatarFallback } from '../ui/avatar';
 import { Button } from '../ui/button';

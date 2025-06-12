@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { onAuthStateChange, getUserProfile } from '../../lib/firebase';
+import { onAuthStateChange, getUserProfile, isFirebaseInitialized } from '../../lib/firebase-safe';
 import { useAuthStore } from '../../store/authStore';
 
 interface AuthGuardProps {
@@ -18,6 +18,13 @@ export function AuthGuard({
   const { user, userProfile, loading, setUser, setUserProfile, setLoading } = useAuthStore();
 
   useEffect(() => {
+    // Firebase가 초기화되지 않은 경우 setup 페이지로 리다이렉트
+    if (!isFirebaseInitialized) {
+      console.log('Firebase가 초기화되지 않았습니다. 설정 페이지로 이동합니다.');
+      navigate('/setup');
+      return;
+    }
+
     const unsubscribe = onAuthStateChange(async (firebaseUser) => {
       setLoading(true);
       
